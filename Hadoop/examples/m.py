@@ -1,56 +1,56 @@
 #!/usr/bin/env python
 # -*-coding:utf-8 -*
-
-# Importar el módulo sys para la entrada estándar
-import sys
 import psycopg2
 import re
+import json
+import os
 
-connection = psycopg2.connect(  user = "postgres",
-                                password = "postgres",
-                                host = "db",
-                                port = "5432",
-                                database = "db")
+try:
+    cursor = connection.cursor()
+    print("Registrando elementos a la base de datos...")
+    with open('outhadoop/part-00000','r') as archivo:
+     next(archivo)
+     for linea in archivo:
+         datos = re.findall(r'\b\w+\b|\([^)]*\)', linea)
 
-# Iterar sobre cada línea de la entrada estándar
-for line in sys.stdin:
-    docs = line.lower()
-    arr = []
+         letra = datos[0]
+         pares = [tuple(map(int, par.strip('()').split(' '))) for par in datos[1:]]
+         for n, m in pares:
+             cursor.execute("INSERT INTO registros (palabra, documento, repeticiones) VALUES (%s, %s, %s) ON CONFLICT (palabra, documento) DO NOTHING", (letra, n, m))
+         
+         connection.commit()
+    
+    while True:
+         print("\nMenú")
+         print("1. Buscar palabra")
+         print("2. Salir")
 
-    i = 0
-    # Dividir la línea en dos partes usando el marcador '<splittername>'
-    name, docs = docs.split('<splittername>')
-    name, url = name.split()
+         opcion = input("Seleccione una opción: ")
+         if opcion == "1":
+            os.system('cls' if os.name == 'nt' else 'clear')
+            palabra = input("Inserte palabra: ")
 
-    # Iterar sobre una lista de caracteres a ser eliminados o reemplazados
-    for char in [",", ".", '"', "'", "(", ")", "\\", ";", ":", "$1", "$", "&"]:
-        docs = docs.replace(char, '')
+            query = f"SELECT documento, repeticiones, url FROM paginas INNER JOIN registros ON paginas.id = registros.documento WHERE palabra = '{palabra}' ORDER BY repeticiones DESC LIMIT 5"
+            cursor.execute(query)
 
-    for word in docs.split():
-            # Check if the word is a letter
-            if not word.isalpha():
-                # Skip the word
-                continue
+            resultados = cursor.fetchall()
+            resultados_json = []
+            column_names = [desc[0] for desc in cursor.description]
 
-            # Add the processed word to the array
-            arr.append((word, name, 1))
+            for fila in resultados:
+                fila_json = dict(zip(column_names, fila))
+                resultados_json.append(fila_json)
+            
+            print(json.dumps(resultados_json, indent=2))
+         elif opcion == "2":
+            break
+         else:
+            print("Opcion Incorrecta")
 
-    # Iterar sobre la lista 'arr' ordenada y imprimir cada elemento
-    for word_data in sorted(arr):
-        word, name, count = word_data
-        print(f"{word}\t{name}\t{count}")
-
-    try:
-        cursor = connection.cursor()
-        for i in range(30):
-            cursor.execute("INSERT INTO paginas (id, url) VALUES (%s, %s) ON CONFLICT (id) DO NOTHING", (name, url))
-            connection.commit()
-
-    except (Exception, psycopg2.Error) as error :
-        print ("Error while connecting to PostgreSQL", error)
-
-    finally:
-        if cursor:
+except (Exception, psycopg2.Error) as error :
+    print ("Error while connecting to PostgreSQL", error)
+finally:
+        if(connection):
             cursor.close()
-        if connection:
             connection.close()
+            print("PostgreSQL connection is closed")

@@ -13,7 +13,7 @@ RUN apt-get update -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Instalación de paquetes de Python necesarios
-RUN pip3 install requests
+RUN pip3 install requests wikipedia bs4
 
 # Configuración del usuario hduser y configuraciones relacionadas con sudo
 RUN useradd -m hduser \

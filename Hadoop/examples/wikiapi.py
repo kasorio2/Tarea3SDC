@@ -1,34 +1,22 @@
 import requests
 import json
-import wikipediaapi
+import wikipedia as wiki
 import os
 
-paises = ["Argentina", "Bolivia", "Perú", "Brazil", "Canada", "Venezuela", "Chile", "Rusia", "Alemania", "España",
+p = ["Argentina", "Bolivia", "Perú", "Brazil", "Canada", "Venezuela", "Chile", "Russia", "Alemania", "España",
                   "El Salvador", "Italia", "Francia", "Guatemala", "Australia", "Colombia", "Ecuador", "Uruguay", "México",
-                  "Filipinas", "Nigeria", "Qatar", "China", "Japón", "Grecia", "Portugal", "Costa Rica", "Cuba",
+                  "Filipina", "Nigeria", "Qatar", "China", "Japón", "Greece", "Portugal", "Costa Rica", "Cuba",
                   "India", "Israel"]
 
 i = 1
 
-for paginas in paises:
-    if i <= 15:
-        wiki_wiki = wikipediaapi.Wikipedia(user_agent='tarea3sd',language='en',extract_format=wikipediaapi.ExtractFormat.WIKI)
-        page = wiki_wiki.page(paginas)
-        if page.exists():
-            text = '{} {}<splittername>{}'.format(i, page.fullurl ,json.dumps(page.text))
-            file = f"./carpeta1/{i}{paginas}.txt"
-            if os.path.isfile(file):
-                os.remove(file)
-            with open(file, 'wb') as f:
-                f.write(text.encode('utf-8'))  
-    else:
-        wiki_wiki = wikipediaapi.Wikipedia(user_agent='tarea3sd',language='en',extract_format=wikipediaapi.ExtractFormat.WIKI)
-        page = wiki_wiki.page(paginas)
-        if page.exists():
-            text = '{} {}<splittername>{}'.format(i, page.fullurl ,json.dumps(page.text))
-            file = f"./carpeta2/{i}{paginas}.txt"
-            if os.path.isfile(file):
-                os.remove(file)
-            with open(file, 'wb') as f:
-                f.write(text.encode('utf-8'))
-    i += 1
+for i in p:
+    a = wiki.page(i,auto_suggest=False)
+    carpeta = "carpeta1" if p.index(i) < 15 else "carpeta2"
+    with open("./"+carpeta+"/"+str(p.index(i))+"wiki"+str(i.replace(" ", "_"))+".txt", "w") as f:
+        f.write(str(p.index(i))+"xdxdxd")
+        f.write('\n')
+        f.write(a.content)
+        f.write('\n')
+        f.close()
+    print("Escribio el archivo: "+i)

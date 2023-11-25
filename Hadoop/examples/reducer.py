@@ -7,22 +7,32 @@ current_word = None
 current_count = 0
 word = None
 
-doc_count = {}
+count_file = -1
+files = {}
+# palabra = {1:89}
 for line in sys.stdin:
-    # print(line.replace("\n","").replace("\t",","))
-    result = line.replace("\n","").split('\t')
 
-    if result[0] in doc_count.keys():
-        if result[1] in doc_count[result[0]].keys():
-            doc_count[result[0]][result[1]] += 1
+    l = line.strip()
+    word, num = l.split("\t",1)
+    if(word in files):
+        if(num in files[word]):
+            files[word][num] += 1
         else:
-            doc_count[result[0]][result[1]] = 1
+            files[word][num] = 1
     else:
-        doc_count[result[0]] = {result[1]: 1}
+        files[word] = {num:1}
 
-print('Word\t[ (Document1, Count1), ... ]')
-for key,counts in doc_count.items():
-    value = ""
-    for doc,count in counts.items():
-        value += "({}, {}) ".format(doc, count)
-    print("{}\t{}".format(key, value))
+f = open("output.txt", "w")
+f.write("Palabra\t(Archivo, Cantidad)\n")
+for word in files:
+    f.write(word+"\t")
+    x = ""
+    for file in files[word]:
+        f.write("("+str(file)+","+str(files[word][file])+")"+" ") #output
+        x = "("+str(file)+","+str(files[word][file])+")"+" "
+        print(word+"\t"+x)
+    f.write("\n")
+f.close()
+
+#word | (file1, count1), (file2, count2), (file3, count3)
+#hola | (1, 2), (2, 1), (3, 1)
