@@ -5,7 +5,7 @@ import os
 
 paises = ["Argentina", "Bolivia", "Perú", "Brazil", "Canada", "Venezuela", "Chile", "Rusia", "Alemania", "España",
                   "El Salvador", "Italia", "Francia", "Guatemala", "Australia", "Colombia", "Ecuador", "Uruguay", "México",
-                  "Filipinas", "Nigeria", "Qatar", "China", "Japón", "Afganistán", "Portugal", "Costa Rica", "Cuba",
+                  "Filipinas", "Nigeria", "Qatar", "China", "Japón", "Grecia", "Portugal", "Costa Rica", "Cuba",
                   "India", "Israel"]
 
 i = 1
