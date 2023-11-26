@@ -6,6 +6,7 @@ import sys
 current_word = None
 current_count = 0
 word = None
+#Codigo basado en lo obtenido de ayudantia
 
 count_file = -1
 files = {}
@@ -28,11 +29,8 @@ for word in files:
     f.write(word+"\t")
     x = ""
     for file in files[word]:
-        f.write("("+str(file)+","+str(files[word][file])+")"+" ") #output
+        f.write("("+str(file)+","+str(files[word][file])+")"+" ") 
         x = "("+str(file)+","+str(files[word][file])+")"+" "
         print(word+"\t"+x)
     f.write("\n")
 f.close()
-
-#word | (file1, count1), (file2, count2), (file3, count3)
-#hola | (1, 2), (2, 1), (3, 1)

@@ -2,7 +2,7 @@
 # -*-coding:utf-8 -*
 
 import sys
-
+#Codigo basado en lo obtenido de ayudantia
 a = 0 
 
 for line in sys.stdin:

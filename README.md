@@ -1,32 +1,6 @@
-# Ayudantia-Hadoop
-joaquin.fernandez1@mail.udp.cl
-
+# Codigo base obtenido de Ayudantia-Hadoop
 Para levantar topologia de contenedores:
-```sh
-docker compose up --build
-```
-Para visualizar contenedores y sus estados:
-```sh
-docker ps -a
-```
-Para entrar a contenedores:
-```sh
-docker exec -it name_service_o_id bash
-```
-Para bajar arquitectura junto a los volumenes usar el siguiente comando:
-```sh
-docker compose down -v
-```
-Para borrar cache usar el siguiente comando luego de bajar todos los contenedores
-```sh
-docker system prune -a
-```
-Para borrar contenedores a mano sin la necesidad de usar el -v en el comando compose down:
-```sh
-docker volume rm $(docker volume ls -q)
-```
 
----
 ## *Tutorial Hadoop*
 
 Primero que todo ya deben de tener la topología levantada. Posterior de ello deben de visualizar los respectivo directorios con los cuales van a trabajar vendrían a ser examples y buscador. \
